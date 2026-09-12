@@ -49,7 +49,7 @@ export class DailyNotificationBotStack extends cdk.Stack {
     );
 
     // EventBridge rule - triggers evey morning
-    new events.Rule(this, "MorningSchedule", {
+    new events.Rule(this, "CronSchedule", {
       schedule: events.Schedule.cron({
         minute: "30",
         hour: "13", // UTC - 6:30 am pacific time
