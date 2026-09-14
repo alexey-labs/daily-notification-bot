@@ -84,7 +84,7 @@ export class DailyNotificationBotStack extends cdk.Stack {
     new events.Rule(this, "HourlyCronSchedule", {
       schedule: events.Schedule.cron({
         minute: "1",
-        hour: "13-1",
+        hour: "1-13",
         weekDay: "*",
       }),
       targets: [new eventTargets.LambdaFunction(scheduledFn)],
