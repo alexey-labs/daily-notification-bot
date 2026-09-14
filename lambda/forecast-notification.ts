@@ -52,7 +52,7 @@ function formatMessage(weather: WeatherData, advice: string): string {
     weekday: "long",
     month: "short",
     day: "numeric",
-    timeZone: "America/Los_Angeles",
+    timeZone: weather.timeZone,
   });
 
   return [
@@ -60,6 +60,7 @@ function formatMessage(weather: WeatherData, advice: string): string {
     `${weather.daytime.name}: ${weather.daytime.temperature}°${weather.daytime.temperatureUnit}, ${weather.daytime.shortForecast}`,
     `Tonight: ${weather.nighttime.temperature}°${weather.nighttime.temperatureUnit}, ${weather.nighttime.shortForecast}`,
     `Wind: ${weather.daytime.windSpeed} ${weather.daytime.windDirection} | Rain: ${weather.daytime.probabilityOfPrecipitation}%`,
+    `Sunrise: ${weather.sunrise}, Sunset: ${weather.sunset}`,
     "",
     advice,
   ].join("\n");

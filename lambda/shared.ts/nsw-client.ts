@@ -67,10 +67,11 @@ export class NwsClient {
 
   async setNwsPoint(): Promise<void> {
     try {
-      const data: any = await this.axiosInstanceNws.request({
+      const reponse: any = await this.axiosInstanceNws.request({
         method: "GET",
         url: this.nwsPointUrl,
       });
+      const data = reponse.data;
       this.timeZone = data.properties.relativeLocation.timeZone;
       this.nwsReport = {
         forecastUrl: data.properties.forecast,
@@ -93,10 +94,11 @@ export class NwsClient {
   async getMorningForecast(): Promise<WeatherData> {
     try {
       const point = this.nwsReport;
-      const data: any = await this.axiosInstanceNws.request({
+      const reponse: any = await this.axiosInstanceNws.request({
         method: "GET",
         url: point.forecastUrl,
       });
+      const data = reponse.data;
 
       const periods = data.properties.periods;
       const daytime = periods.find((p: any) => p.isDaytime);
@@ -119,11 +121,11 @@ export class NwsClient {
   async getHourlyForecast(): Promise<HourlyForecastPeriod> {
     try {
       const point = this.nwsReport;
-      const data: any = await this.axiosInstanceNws.request({
+      const reponse: any = await this.axiosInstanceNws.request({
         method: "GET",
         url: point.forecastHourlyUrl,
       });
-      const periods = data.properties.periods;
+      const periods = reponse.data.properties.periods;
       const currentHourPeriod = periods[0];
       return {
         temperature: currentHourPeriod.temperature,

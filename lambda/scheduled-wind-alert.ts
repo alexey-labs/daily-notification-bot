@@ -7,11 +7,13 @@ const LATITUDE = getEnvOfThrow("LATITUDE");
 const LONGITUDE = getEnvOfThrow("LONGITUDE");
 const NWS_USER_AGENT = getEnvOfThrow("NWS_USER_AGENT");
 
-enum clothingEnum {
-  jacket = "jacket",
-  shirt = "shirt",
-  hoodie = "hoodie",
-}
+const ClothingEnum = {
+  jacket: "jacket",
+  shirt: "shirt",
+  hoodie: "hoodie",
+} as const;
+
+type ClothingEnum = (typeof ClothingEnum)[keyof typeof ClothingEnum];
 
 // Main handler — EventBridge triggers this every hour
 export async function handler(): Promise<void> {
@@ -25,7 +27,7 @@ export async function handler(): Promise<void> {
   const clothing = getSuggestedClothing(currentWeather);
 
   // default in SF is 'HOODIE', report only edge cases
-  if (clothingEnum.hoodie === clothing) {
+  if (ClothingEnum.hoodie === clothing) {
     console.log("Not reporting default 'hoodie' clothing suggestion");
     return;
   }
@@ -41,22 +43,22 @@ export async function handler(): Promise<void> {
   console.log("Hourly Forecast sent:", message);
 }
 
-function getSuggestedClothing(weather: HourlyForecastPeriod): clothingEnum {
+function getSuggestedClothing(weather: HourlyForecastPeriod): ClothingEnum {
   const windSpeedMph = parseInt(weather.windSpeed.split(" ")[0]);
   if (
     windSpeedMph < 5 &&
     weather.shortForecast === "Sunny" &&
     weather.temperature > 65
   ) {
-    return clothingEnum.shirt;
+    return ClothingEnum.shirt;
   }
-  if (windSpeedMph > 10 || weather.temperature < 65) return clothingEnum.jacket;
-  return clothingEnum.hoodie;
+  if (windSpeedMph > 10 || weather.temperature < 65) return ClothingEnum.jacket;
+  return ClothingEnum.hoodie;
 }
 
 function formatMessage(
   weather: HourlyForecastPeriod,
-  clothing: clothingEnum,
+  clothing: ClothingEnum,
 ): string {
   return [
     `Right now: ${weather.temperature}°${weather.temperatureUnit}, ${weather.shortForecast}`,
