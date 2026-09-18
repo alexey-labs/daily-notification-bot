@@ -52,7 +52,7 @@ function getSuggestedClothing(weather: HourlyForecastPeriod): ClothingEnum {
   ) {
     return ClothingEnum.shirt;
   }
-  if (windSpeedMph > 10 || weather.temperature < 65) return ClothingEnum.jacket;
+  if (windSpeedMph > 15 || weather.temperature < 60) return ClothingEnum.jacket;
   return ClothingEnum.hoodie;
 }
 
